@@ -1,0 +1,29 @@
+/*!
+    Title: Project Title
+    Version: 0.0.0
+    Last Change: 03/11/2018
+    Author: Yilber Mejia
+    Repo: https://github.com/Yilber/project-name
+    Issues: https://github.com/Yilber/project-name/issues
+    Description: This file gets compiled using Gulp and send to the /css folder which is then loaded on the page.
+*/
+/*!
+    File Contents:
+        1. Variables (overrides bootstrap variables)
+        2. Bootstrap files
+        3. Global Styles
+        4. About Styles
+        5. Contact Styles
+        6. Media Queries
+*/
+
+@import "theme/variables";
+@import "bootstrap";
+@import "theme/globals";
+@import "theme/footer";
+
+
+.lkj {
+    color: #45FCCD;
+    background: rgb(255,0,0);
+}

@@ -1,0 +1,18 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        // modules: false, "commonjs", "amd", "umd", "systemjs" or "iife"
+        "modules": false,
+        "loose": false,
+        "exclude": "transform-typeof-symbol"
+      }
+    ]
+  ],
+  "plugins": [
+    "external-helpers",
+    "transform-object-rest-spread",
+    "transform-es2015-modules-strip",
+  ]
+}
