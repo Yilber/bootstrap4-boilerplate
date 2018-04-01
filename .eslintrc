@@ -1,6 +1,5 @@
 // off=0, warn = 1, error = 2,
 {
-  
   "extends": "airbnb",
   "parser": "babel-eslint",
   "rules": {

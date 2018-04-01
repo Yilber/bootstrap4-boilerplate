@@ -1,20 +1,34 @@
 {
-  "name": "boilerplate",
-  "version": "1.0.0",
-  "description": "Boilerplate for starting projects",
-  "main": "index.js",
+  "name": "front-end-boilerplate-with-gulp-and-bootstrap4",
+  "version": "0.0.1",
+  "description": "bootstrap 4 boilerplate with gulp, sass, fontawesome",
+  "keywords": [
+    "gulp",
+    "bootstrap 4",
+    "boilerplate",
+    "frontend"
+  ],
+  "main": "gulpfile.js",
+  "author": "Yilber Mejia",
+  "license": "MIT",
+  "homepage": "https://github.com/Yilber/boilerplate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yilber/boilerplate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Yilber/boilerplate/issues"
+  },
+  "engines": {
+    "node": ">=6.3.1",
+    "npm": ">=3.10.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "js-compile": "npm-run-all --parallel js-compile-*",
     "js-compile-standalone": "rollup --environment BUNDLE:false --config rollup.config.js --sourcemap",
     "js-compile-bundle": "rollup --environment BUNDLE:true --config rollup.config.js --sourcemap",
-    "js-compile-plugins": "cross-env PLUGINS=true babel src/js/ --out-dir dist/js/ --source-maps",
-    "js-minify": "npm-run-all --parallel js-minify-*",
-    "js-minify-standalone": "uglifyjs --compress typeofs=false --mangle --comments \"/^!/\" --source-map \"content=dist/js/bootstrap.js.map,includeSources,url=bootstrap.min.js.map\" --output dist/js/bootstrap.min.js dist/js/bootstrap.js",
-    "js-minify-bundle": "uglifyjs --compress typeofs=false --mangle --comments \"/^!/\" --source-map \"content=dist/js/bootstrap.bundle.js.map,includeSources,url=bootstrap.bundle.min.js.map\" --output dist/js/bootstrap.bundle.min.js dist/js/bootstrap.bundle.js"
+    "js-compile-plugins": "cross-env PLUGINS=true babel src/js/vendor/bootstrap/ --out-dir dist/js/ --source-maps"
   },
-  "author": "Yilber Mejia",
-  "license": "ISC",
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.37",
     "@babel/core": "7.0.0-beta.37",
@@ -41,23 +55,20 @@
     "gulp-htmlmin": "^4.0.0",
     "gulp-jsonminify": "^1.1.0",
     "gulp-livereload": "^3.8.1",
-    "gulp-php2html": "^0.3.2",
     "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-run-command": "0.0.9",
     "gulp-sass": "^3.2.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
-    "npm-run-all": "^4.1.2",
     "rollup": "^0.53.4",
     "rollup-plugin-babel": "^4.0.0-beta.0",
     "rollup-plugin-node-resolve": "^3.0.2",
-    "rollup-stream": "^1.24.1",
     "static-server": "^2.2.0"
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
-    "jquery": "^1.9.1",
+    "jquery": "^1.12.4",
     "popper.js": "^1.12.9"
   }
 }

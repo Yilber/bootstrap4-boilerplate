@@ -1,6 +1,7 @@
 // Core
-var gulp          = require('gulp');
-var plumber       = require('gulp-plumber');
+var gulp    = require('gulp');
+var plumber = require('gulp-plumber');
+const path    = require('path')
 
 //CSS
 var autoprefixer = require('gulp-autoprefixer');
@@ -21,68 +22,85 @@ var htmlmin    = require('gulp-htmlmin');
 var livereload = require('gulp-livereload');
 var del        = require('del');
 
+const BUNDLE = true;
+const PRODUCTION = false;
+
+const pkg = require(path.resolve(__dirname, './package.json'))
+
 // Path folders
-var SCRIPT_PATH = './src/js/**/*.js';
-var JSON_PATH   = './src/js/**/*.json';
-var SCSS_PATH   = './src/scss/**/*.scss';
-var HTML_PATH   = './src/docs/html/**/*.html';
-var PHP_PATH    = './src/docs/php/**/*.php';
-var PUBLIC_PATH = './dist';
+var paths = {
+    js: {
+        src: './src/js/**/*.js',
+        dest: './dist/js'
+    },
+    json: {
+        src: './src/js/**/*.json',
+        dest: './dist/data'
+    },
+    bootstrap: {
+        src: './src/js/vendor/bootstrap',
+        dest: './dist/js/vendor'
+    },
+    css: {
+        src: './src/scss/**/*.scss',
+        dest: './dist/css'
+    },
+    html: {
+        src: './src/views/**/*.html',
+        dest: './dist'
+    },
+    php: {
+        src: './src/php/**/*.php',
+        dest: './dist'
+    },
+    dist: {
+        dest: './dist',
+    }
+}
 
 // Watch with html server
-gulp.task('watch', ['del:dist','minify-html','styles','scripts','build:standalone'], function() {
+gulp.task('watch', ['del:dist','minify:html','styles:scss','scripts','js-compile:bootstrap'], function() {
     console.log('Starting watch task');
 
     require('./server.js');
     
-    gulp.watch( HTML_PATH, ['minify-html'] );
-    gulp.watch( SCSS_PATH, ['styles'] );
-    gulp.watch( SCRIPT_PATH, ['scripts'] );
-    gulp.watch( JSON_PATH, ['dependencies'] );
+    gulp.watch(paths.html, ['minify-html']);
+    gulp.watch(paths.css, ['styles']);
+    gulp.watch(paths.js, ['scripts']);
+    gulp.watch(paths.json, ['dependencies']);
 
     livereload.listen();
 });
 
-// Minify html files
-gulp.task('minify-html', function() {
-    console.log('Starting minify-html task');
-
-    return gulp.src( HTML_PATH )
-        .pipe( htmlmin({
-            collapseWhitespace: true
-        }))
-        .pipe( gulp.dest('./dist') );
-});
-
 // Styles
 // remember comment out the sourcemaps when ready to push to the server
-gulp.task('styles', function() {
+gulp.task('styles:scss', function() {
     console.log('Starting styles task');
     
-    return gulp.src('./src/scss/style.scss' )
-        .pipe( plumber( function(err){
+    return gulp.src('./src/scss/style.scss')
+        .pipe(plumber(function(err) {
             console.log('Styles error');
             console.log(err);
             this.emit('end');
         }))
-        .pipe( sourcemaps.init() )
-        .pipe( autoprefixer() )
-        .pipe( sass({
+        .pipe(sourcemaps.init())
+        .pipe(autoprefixer())
+        .pipe(sass({
             outputStyle:'compressed'
         }))
-        .pipe( sourcemaps.write() )
-        .pipe( rename('style.css') )
-        .pipe( gulp.dest(PUBLIC_PATH + '/css') )
-        .pipe( livereload() );
+        .pipe(sourcemaps.write())
+        .pipe(rename('style.css'))
+        .pipe(gulp.dest(paths.dist + '/css'))
+        .pipe(livereload());
 });
 
 // Scripts
 // remember comment out the sourcemaps when ready to push to the server
-gulp.task('scripts', ['dependencies'], function() {
+gulp.task('js-compile:scripts', function() {
     console.log('Starting scripts task');
 
     var scripts = [
-        './src/js/main.js',
+        `${paths.js.root}/main.js`,
     ];
 
     return gulp.src(scripts)
@@ -92,73 +110,107 @@ gulp.task('scripts', ['dependencies'], function() {
             this.emit('end');
             })
         )
-        .pipe( eslint() )
-        .pipe( eslint.format() )
-        .pipe( eslint.failAfterError() )
-        .pipe( sourcemaps.init() )
-        .pipe( concat( 'main.min.js' ) )
-        .pipe( babel( {
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
+        .pipe(sourcemaps.init())
+        .pipe(concat('main.min.js'))
+        .pipe(babel({
             presets: ['env']
         }))
-        .pipe( sourcemaps.write() )
-        .pipe( uglify() )
-        .pipe( gulp.dest(PUBLIC_PATH + '/js') )
-        .pipe( livereload() );
+        .pipe(sourcemaps.write())
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dist.dest))
+        .pipe(livereload());
 });
 
-gulp.task('dependencies', function(){
+gulp.task('js-compile:dependencies', function() {
     console.log('Starting dependencies task');
 
     /* Libraries that your website needs
      * comment out jquery if you're using a CDN
      */
-    var jsfiles = [
-        './node_modules/jquery/jquery.min.js'
+    var jsdependencies = [
+        './node_modules/jquery/dist/jquery.min.js'
     ];
 
     var jsonfiles = [
-        './src/data/data.json'
+        `${paths.json.root}/data.json`
     ];
 
-    gulp.src( jsfiles )
-        .pipe( plumber( function(err){
+    gulp.src(jsdependencies)
+        .pipe(plumber(function(err) {
             console.log('Dependencies error');
             console.log(err);
             this.emit('end');
             })
         )
-        .pipe( uglify() )
-        .pipe( gulp.dest(PUBLIC_PATH + '/js') );
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dist + '/js'));
 
-    gulp.src( jsonfiles )
-        .pipe( plumber( function(err){
+    gulp.src(jsonfiles)
+        .pipe(plumber(function(err) {
             console.log('JSON files error');
             console.log(err);
             this.emit('end');
-            })
-        )
-        .pipe( eslint() )
-        .pipe( eslint.format() )
-        .pipe( eslint.failAfterError() )
-        .pipe( jsonminify() )
-        .pipe( gulp.dest(PUBLIC_PATH + '/data') );
+        }))
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
+        .pipe(jsonminify())
+        .pipe(gulp.dest(paths.dist + '/data'));
 
-    gulp.src( './src/.htaccess' )
-        .pipe( gulp.dest( PUBLIC_PATH ) );
+    gulp.src('./src/.htaccess')
+        .pipe(gulp.dest(paths.dist));
 });
 
 // Deletes the dist folder
 gulp.task('del:dist', function() {
-  return del.sync('./dist');
+  return del.sync(paths.dist);
 });
 
-gulp.task('build:bundle', run ('npm run js-compile-bundle'));
-gulp.task('build:standalone', run ('npm run js-compile-standalone'));
-gulp.task('build:plugins', run ('npm run js-compile-plugins'));
-gulp.task('build:js-compile', run ('npm run js-compile'));
+gulp.task('bootstrap:plugins', run('npm run js-compile-plugins'));
 
-gulp.task('build:js-minify', run ('npm run js-minify'));
-gulp.task('build:all', ['build:js-compile'], run ('npm run js-minify'));
+gulp.task('copy:bootstrap', function () {
+    return gulp.src('./node_modules/bootstrap/js/src/**.js')
+        .pipe(gulp.dest(paths.bootstrap.src));
+});
+
+gulp.task('js-compile:bootstrap', function(){
+    if( BUNDLE){
+        run('npm run js-compile-bundle');
+    } else {
+        run('npm run js-compile-standalone');
+    }
+});
+
+// Minify html files
+gulp.task('minify:html', function() {
+    console.log('Starting minify:html task');
+
+    return gulp.src(paths.html)
+        .pipe(htmlmin({
+            collapseWhitespace: true
+        }))
+        .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('minify:js-bootstrap', function(){
+    let src = 'bootstrap.js';
+
+    if( BUNDLE){
+        src = 'bootstrap.bundle.js';
+    }
+
+    gulp.src(paths.js.dest + src)
+        .pipe(plumber(function(err) {
+            console.log('Dependencies error');
+            console.log(err);
+            this.emit('end');
+        }))
+        .pipe(uglify({output: {comments: /^!/}}))
+        .pipe(gulp.dest(paths.js.dest));
+});
 
 // gulp.task('rollup', function(){
 //     console.log('Starting rollup task');

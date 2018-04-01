@@ -1,4 +1,4 @@
-serverConfig = {
+const serverConfig = {
 	isStaticServer: true,
 	hostname: '127.0.0.1',
 	port: 80,
@@ -11,7 +11,7 @@ serverConfig = {
 		//index: 'foo.html', // optional, defaults to 'index.html'
 		notFound: '404.html'    // optional, defaults to undefined
 	}
-}
+};
 
 if(serverConfig.isStaticServer){
 	// Static HTML server
