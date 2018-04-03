@@ -132,7 +132,7 @@ List of things to fix or add
 	removed extra libraries
 	organized a config file
 	moved .babelrc into package.js
-* 1.0.0
+* 0.0.4
 
 ## Bugs
 

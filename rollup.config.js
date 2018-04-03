@@ -1,9 +1,10 @@
 'use strict'
 
 const path     = require('path');
+const bootstrapPath = require('./config.js').paths.bootstrap;
 const babel    = require('rollup-plugin-babel');
 const resolve  = require('rollup-plugin-node-resolve');
-const BUNDLE   = process.env.BUNDLE === 'true';
+const isBundle = require('./config.js').bootstrapConfig.isBundle;
 const year     = new Date().getFullYear();
 let fileDest   = 'bootstrap.js';
 const external = ['jquery', 'popper.js'];
@@ -24,7 +25,7 @@ const globals = {
   'popper.js': 'Popper'
 };
 
-if (BUNDLE) {
+if (isBundle) {
   fileDest = 'bootstrap.bundle.js'
   // Remove last entry in external array to bundle Popper
   external.pop()
@@ -33,14 +34,14 @@ if (BUNDLE) {
 }
 
 module.exports = {
-  input: path.resolve(__dirname, './src/js/vendor/bootstrap/index.js'),
+  input: path.resolve(__dirname, `${bootstrapPath.src}/index.js`),
   output: {
     banner: `/*!
   * Bootstrap v4.0.0 (https://getbootstrap.com)
   * Copyright 2011-${year} The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */`,
-    file: path.resolve(__dirname, `./dist/js/${fileDest}`),
+    file: path.resolve(__dirname, `${bootstrapPath.dest}/${fileDest}`),
     format: 'umd',
     globals,
     name: 'bootstrap'

@@ -1,7 +1,7 @@
 {
   "name": "front-end-boilerplate-with-gulp-and-bootstrap4",
-  "version": "0.0.1",
-  "description": "bootstrap 4 boilerplate with gulp, sass, fontawesome",
+  "version": "0.0.4",
+  "description": "bootstrap 4 boilerplate with gulp, babel, sass and fontawesome",
   "keywords": [
     "gulp",
     "bootstrap 4",
@@ -25,14 +25,14 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "js-compile-standalone": "rollup --environment BUNDLE:false --config rollup.config.js --sourcemap",
-    "js-compile-bundle": "rollup --environment BUNDLE:true --config rollup.config.js --sourcemap",
-    "js-compile-plugins": "cross-env PLUGINS=true babel src/js/vendor/bootstrap/ --out-dir dist/js/ --source-maps"
+    "js-compile-bootstrap": "rollup --environment --config rollup.config.js --sourcemap",
+    "js-compile-plugins": "cross-env PLUGINS=true babel src/js/vendor/bootstrap/ --out-dir dist/js/vendor/ --source-maps"
   },
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.37",
     "@babel/core": "7.0.0-beta.37",
     "@babel/preset-env": "7.0.0-beta.37",
+    "apache-server-configs": "^2.15.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
     "babel-plugin-external-helpers": "^6.22.0",

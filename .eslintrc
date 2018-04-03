@@ -8,6 +8,7 @@
     'no-multi-spaces': 'off',
     "linebreak-style": ["error", "windows"],
     "prefer-destructuring": ["error", {"object": true, "array": false}],
+    "import/no-extraneous-dependencies": ["off", {"devDependencies": false}]
   },
   "globals": {
     "$": false,

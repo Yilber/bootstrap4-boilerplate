@@ -1,5 +1,12 @@
-/* Sticky footer styles
--------------------------------------------------- */
+/* -----------------------
+ * ----- 3. Globals ------
+ * -----------------------
+ */
+
+/*
+ * Sticky footer styles
+ * --------------------
+ */
 html {
   position: relative;
   min-height: 100%;
@@ -12,10 +19,6 @@ body {
   -------------------------------------------------- */
   /* Not required for template or sticky footer method. */
   > .container {
-    padding: 60px 15px 0;
+    //padding: 60px 15px 0;
   }
-}
-
-code {
-  font-size: 80%;
 }
