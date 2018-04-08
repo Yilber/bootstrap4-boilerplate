@@ -8,7 +8,7 @@
 		<meta name="author" content="author's name">
 		<meta name="description" content="short description">
 		<meta name="keywords" content="keyword list">
-		
+
 		<meta name="theme-color" content="#3DB1A4">
 		<meta name="msapplication-navbutton-color" content="#3DB1A4">
 		<meta name="apple-mobile-web-app-status-bar-style" content="#3DB1A4">
@@ -17,9 +17,8 @@
 		<link rel="icon" href="favicon.png?fit=32%2C32" sizes="32x32"/>
 		<link rel="icon" href="favicon.png?fit=32%2C32" sizes="192x192"/>
 		<link rel="apple-touch-icon-precomposed" href="favicon.png?fit=32%2C32"/>
-		
-		<link rel="stylesheet" href="css/style.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+		<link rel="stylesheet" href="css/style.min.css">
 	</head>
 	<body>
 		<header>
@@ -59,9 +58,10 @@
 			<h1 class="mt-5 text-info text-center">Bootstrap Boilerplate</h1>
 
 			<p class="lead">For Bootstrap 4 documentation go to <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" class="text-info" target="_blank">getbootstrap.com</a></p>
-			<p></p>
-			
+
+			<div id="es6"></div>
 		</main>
+
 
 		<footer class="footer bg-info">
 			<div class="container">
@@ -73,13 +73,14 @@
     	=========================================================================================================
     	Placed at the end of the document so the pages load faster
     	-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 
-		<script>window.jQuery || document.write('<script src="/js/jquery.min.js?ver=1.0.0"><\/script>')</script>
+		<script>window.jQuery || document.write('<script src="/js/jquery.min.js?ver=1.12.4"><\/script>')</script>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
-		<script src="./js/bootstrap.min.min.js?ver=1.0.0"></script>
+		<script src="./js/bootstrap.bundle.min.js?ver=1.0.0"></script>
 		<script src="./js/main.min.js?ver=1.0.0"></script>
+
+		<!-- adds the live reload function -->
+		<script src="http://localhost:35729/livereload.js"></script>
 	</body>
 </html>

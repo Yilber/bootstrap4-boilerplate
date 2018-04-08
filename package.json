@@ -1,33 +1,35 @@
 {
-  "name": "front-end-boilerplate-with-gulp-and-bootstrap4",
-  "version": "0.0.4",
-  "description": "bootstrap 4 boilerplate with gulp, babel, sass and fontawesome",
-  "keywords": [
-    "gulp",
-    "bootstrap 4",
-    "boilerplate",
-    "frontend"
-  ],
+  "name": "boilerplate",
+  "version": "1.0.0",
+  "description": "Frontend boilerplate based on Bootstrap 4 and Sass. The javascript files for Bootstrap are compiled with Gulp, babel and rollup.",
   "main": "gulpfile.js",
-  "author": "Yilber Mejia",
-  "license": "MIT",
-  "homepage": "https://github.com/Yilber/boilerplate",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "js-compile-bootstrap": "rollup --config rollup.config.js --sourcemap",
+    "js-compile-plugins": "cross-env PLUGINS=true babel src/js/vendor/bootstrap/ --out-dir dist/js/vendor/ --source-maps"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Yilber/boilerplate.git"
   },
+  "keywords": [
+    "Gulp",
+    "Rollup",
+    "Babel",
+    "Bootstrap",
+    "Bootstrap 4",
+    "Boilerplate",
+    "Frontend",
+    "Sass",
+    "javascript",
+    "es6"
+  ],
+  "author": "Yilber Mejia",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Yilber/boilerplate/issues"
   },
-  "engines": {
-    "node": ">=6.3.1",
-    "npm": ">=3.10.3"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "js-compile-bootstrap": "rollup --environment --config rollup.config.js --sourcemap",
-    "js-compile-plugins": "cross-env PLUGINS=true babel src/js/vendor/bootstrap/ --out-dir dist/js/vendor/ --source-maps"
-  },
+  "homepage": "https://github.com/Yilber/boilerplate",
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.37",
     "@babel/core": "7.0.0-beta.37",
@@ -48,8 +50,6 @@
     "eslint-plugin-react": "^7.7.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^5.0.0",
-    "gulp-babel": "^7.0.1",
-    "gulp-concat": "^2.6.1",
     "gulp-connect-php": "^1.0.3",
     "gulp-eslint": "^4.0.2",
     "gulp-htmlmin": "^4.0.0",
@@ -57,6 +57,7 @@
     "gulp-livereload": "^3.8.1",
     "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.2.2",
+    "gulp-rollup": "^2.16.2",
     "gulp-run-command": "0.0.9",
     "gulp-sass": "^3.2.1",
     "gulp-sourcemaps": "^2.6.4",
@@ -68,7 +69,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
-    "jquery": "^1.12.4",
+    "jquery": "^3.0.0",
     "popper.js": "^1.12.9"
   }
 }

@@ -1,6 +1,7 @@
 // Core
 const gulp    = require('gulp');
 const plumber = require('gulp-plumber');
+const rollup  = require('gulp-rollup');
 
 // CSS
 const autoprefixer = require('gulp-autoprefixer');
@@ -8,8 +9,7 @@ const sass         = require('gulp-sass');
 
 // Javascript
 const uglify = require('gulp-uglify');
-const babel  = require('gulp-babel');
-const concat = require('gulp-concat');
+const babel  = require('rollup-plugin-babel');
 const eslint = require('gulp-eslint');
 
 // Utilities
@@ -22,14 +22,31 @@ const del        = require('del');
 const run        = require('gulp-run-command').default;
 
 // Configurations
-const {paths, babelConfig, sassConfig, htmlConfig, uglifyConfig, bootstrapConfig: {isBundle: bundle}} = require('./config.js');
-const bootstrapType = bundle === true ? 'bundle' : 'standalone';
+const {
+    paths,
+    sassConfig,
+    banner,
+    htmlConfig,
+    uglifyConfig,
+    bootstrapConfig: { isBundle: bundle }
+} = require('./config.js');
 
 // Deletes the dist folder
 gulp.task('delete:dist', () => {
     console.log('Deleting dist folder');
 
     return del.sync(paths.dest);
+});
+
+// Copies bootstrap to your project
+gulp.task('copy:fonts-images', () => {
+    console.log('Copying fonts and images to your project');
+
+    gulp.src(paths.images.src)
+        .pipe(gulp.dest(paths.images.dest));
+
+    return gulp.src(paths.fonts.src)
+        .pipe(gulp.dest(paths.fonts.dest));
 });
 
 // Copies bootstrap to your project
@@ -57,17 +74,14 @@ gulp.task('copy:dependencies', () => {
             console.log(err);
             this.emit('end');
         }))
-        .pipe(gulp.dest(`${paths.dest}/js`));
+        .pipe(gulp.dest(`${paths.dest}/js`))
+        .pipe(livereload());
 });
 
 // Copies .htaccess to the dist folder
 gulp.task('copy:.htaccess', () => {
-    return gulp.src('./node_modules/apache-server-configs/dist/.htaccess')
-        .pipe(gulp.dest(paths.src));
-});
-
-gulp.task('initialize', ['copy:bootstrap-js', 'copy:js-dependencies', 'copy:.htaccess'], () => {
-    console.log('Project\' initialization');
+    gulp.src(`${paths.src}/.htaccess`)
+        .pipe(gulp.dest(paths.dest));
 });
 
 // Compiles and minifies style.scss into style.css
@@ -91,7 +105,7 @@ gulp.task('compile:styles', () => {
 
 // Compiles all your scripts into main.min.js
 gulp.task('compile:scripts', () => {
-    console.log('Starting js-compile:scripts task');
+    console.log('Starting compile:scripts task');
 
     const scripts = [
         `${paths.js.src}/*.js`,
@@ -107,10 +121,32 @@ gulp.task('compile:scripts', () => {
         .pipe(eslint.format())
         .pipe(eslint.failAfterError())
         .pipe(sourcemaps.init())
-        .pipe(concat('main.min.js'))
-        .pipe(babel(babelConfig))
+        .pipe(rollup({
+            input: `${paths.js.src}/main.js`,
+            output: {
+                format: 'umd',
+                name: 'main',
+                globals: {
+                    jquery: 'jQuery', // Ensure we use jQuery which is always available even in noConflict mode
+                },
+                banner: banner
+            },
+            external: ['jquery'],
+            plugins: [
+                babel({
+                    exclude: 'node_modules/**', // Only transpile our source code
+                    externalHelpersWhitelist: [ // Include only required helpers
+                        'defineProperties',
+                        'createClass',
+                        'inheritsLoose',
+                        'extends'
+                    ]
+                })
+            ]
+        }))
         .pipe(sourcemaps.write())
         .pipe(uglify(uglifyConfig))
+        .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(paths.js.dest))
         .pipe(livereload());
 });
@@ -119,21 +155,28 @@ gulp.task('compile:scripts', () => {
 gulp.task('compile:bootstrap-plugins', run('npm run js-compile-plugins'));
 
 // Compiles bootstrap.js and bootstrap.bundle.js
-gulp.task('compile:bootstrap', run(`npm run js-compile-${bootstrapType}`) );
+gulp.task('compile:bootstrap', run('npm run js-compile-bootstrap'));
 
 // Minify html files
-gulp.task('minify:html', () => {
-    console.log('Starting minify:html task');
+gulp.task('minify:html-php', () => {
+    console.log('Starting minify:html-php task');
 
-    return gulp.src(paths.html.src)
+    gulp.src(`${paths.views.src}/**/*.php`)
+        .pipe(gulp.dest(paths.views.dest));
+
+    gulp.src(`${paths.views.src}/templates/*.php`)
+        .pipe(gulp.dest(`${paths.views.dest}/templates`));
+
+    return gulp.src(`${paths.views.src}/**/*.html`)
         .pipe(htmlmin(htmlConfig))
-        .pipe(gulp.dest(paths.dest));
+        .pipe(gulp.dest(paths.dest))
+        .pipe(livereload());
 });
 
 // Copies, lints and minifies json files into the data folder.
 gulp.task('minify:json', () => {
-    console.log('Starting dependencies task');
-    
+    console.log('Starting minify:json task');
+
     // JSON files needed for the website
     const jsonfiles = [
         `${paths.json.src}/*json`,
@@ -149,14 +192,17 @@ gulp.task('minify:json', () => {
         .pipe(eslint.format())
         .pipe(eslint.failAfterError())
         .pipe(jsonminify())
-        .pipe(gulp.dest(`${paths.dest}/data`));
+        .pipe(gulp.dest(`${paths.dest}/data`))
+        .pipe(livereload());
 });
 
 // Minifies bootstrap.js and bootstrap.bundle.js
-gulp.task('minify:bootstrap', () => {
+gulp.task('minify:bootstrap', ['compile:bootstrap'], () => {
+    console.log('Starting minify:bootstrap task');
+
     let src = 'bootstrap.js';
 
-    if (isBundle) {
+    if (bundle) {
         src = 'bootstrap.bundle.js';
     }
 
@@ -167,23 +213,26 @@ gulp.task('minify:bootstrap', () => {
             this.emit('end');
         }))
         .pipe(uglify(uglifyConfig))
-        .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(paths.bootstrap.dest));
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(paths.bootstrap.dest))
+        .pipe(livereload());
 });
 
 // Watch with html server
-gulp.task('watch', ['del:dist', 'minify:html', 'minify:styles', 'js-compile:scripts', 'js-compile:bootstrap'], () => {
+gulp.task('watch', ['delete:dist', 'copy:.htaccess', 'copy:fonts-images', 'copy:dependencies',
+    'compile:styles', 'compile:scripts', 'minify:html-php', 'minify:json',
+    'minify:bootstrap'], () => {
+
     console.log('Starting watch task');
 
     require('./server.js');
 
-    gulp.src(`${paths.src}/.htaccess`)
-        .pipe(gulp.dest(paths.dest));
-
-    gulp.watch(paths.html, ['minify:html']);
-    gulp.watch(paths.css, ['styles']);
-    gulp.watch(paths.js, ['js-compile:scripts']);
-    gulp.watch(paths.json, ['dependencies']);
+    gulp.watch(`${paths.views.src}/**/*.html`, ['minify:html-php']);
+    gulp.watch(`${paths.views.src}/**/*.php`, ['minify:html-php']);
+    gulp.watch(`${paths.json.src}/**/*.json`, ['minify:json']);
+    gulp.watch(`${paths.bootstrap.src}/*.js`, ['minify:bootstrap']);
+    gulp.watch(`${paths.styles.src}/**/*.scss`, ['compile:styles']);
+    gulp.watch(`${paths.js.src}/**/*.js`, ['compile:scripts']);
 
     livereload.listen();
 });

@@ -8,7 +8,7 @@
 		<meta name="author" content="author's name">
 		<meta name="description" content="short description">
 		<meta name="keywords" content="keyword list">
-		
+
 		<meta name="theme-color" content="#3DB1A4">
 		<meta name="msapplication-navbutton-color" content="#3DB1A4">
 		<meta name="apple-mobile-web-app-status-bar-style" content="#3DB1A4">
@@ -17,8 +17,8 @@
 		<link rel="icon" href="favicon.png?fit=32%2C32" sizes="32x32"/>
 		<link rel="icon" href="favicon.png?fit=32%2C32" sizes="192x192"/>
 		<link rel="apple-touch-icon-precomposed" href="favicon.png?fit=32%2C32"/>
-		
-		<link rel="stylesheet" href="css/style.css">
+
+		<link rel="stylesheet" href="css/style.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 	</head>
 	<body id="body">

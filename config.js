@@ -1,21 +1,14 @@
 module.exports = {
-    babelConfig: {
-        presets: [
-          [
-            'es2015',
-            {
-              loose: true,
-              modules: false,
-              exclude: 'transform-typeof-symbol'
-            }
-          ]
-        ],
-        plugins: [
-          'external-helpers',
-          'transform-object-rest-spread',
-          'transform-es2015-modules-strip'
-        ]
-    },
+    banner: `/*!
+ * Title: Boilerplate
+ * Version: 1.0.0
+ * Last Update: 04/07/2018
+ * Author: Yilber Mejia
+ * Repo: https://github.com/Yilber/boilerplate
+ * Issues: https://github.com/Yilber/boilerplate/issues
+ * Description: Frontend boilerplate based on Bootstrap 4 and Sass. The javascript files for
+Bootstrap are compiled with Gulp, babel and rollup.
+*/`,
 
     uglifyConfig: {
         output: {
@@ -24,7 +17,7 @@ module.exports = {
     },
 
     sassConfig: {
-        outputStyle: 'expanded'
+        outputStyle: 'compressed'
     },
 
     htmlConfig: {
@@ -32,32 +25,16 @@ module.exports = {
     },
 
     bootstrapConfig: {
-        isBundle: false,
-        
-        bannerJs: `/*!
-          * Bootstrap v4.0.0 (https://getbootstrap.com)
-          * Copyright 2011-2018 The Bootstrap Authors https://github.com/twbs/bootstrap/graphs/contributors
-          * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-          */`,
-
-        bannerCSS: `/*!
- * Bootstrap Docs (https://getbootstrap.com)
- * Copyright 2011-2018 The Bootstrap Authors
- * Copyright 2011-2018 Twitter, Inc.
- * Licensed under the Creative Commons Attribution 3.0 Unported License. For
- * details, see https://creativecommons.org/licenses/by/3.0/.
- */`
+        isBundle: true
     },
-    
+
     paths: {
         src: './src',
-
         dest: './dist',
 
         js: {
             src: './src/js',
-            dest: './dist/js',
-            vendor: './src/js/vendor'
+            dest: './dist/js'
         },
 
         json: {
@@ -65,9 +42,19 @@ module.exports = {
             dest: './dist/js'
         },
 
+        fonts: {
+            src: './src/fonts',
+            dest: './dist/css'
+        },
+
+        images: {
+            src: './src/images',
+            dest: './dist'
+        },
+
         bootstrap: {
             src: './src/js/vendor/bootstrap',
-            dest: './dist/js/vendor',
+            dest: './dist/js'
         },
 
         styles: {
@@ -75,14 +62,9 @@ module.exports = {
             dest: './dist/css'
         },
 
-        html: {
-            src: './src/views/*.html',
+        views: {
+            src: './src/views',
             dest: './dist'
         },
-
-        php: {
-            src: './src/php',
-            dest: './dist'
-        }
     }
 };

@@ -1,24 +1,20 @@
-/* -----------------------
- * ----- 3. Globals ------
- * -----------------------
+/*
+ * Global styles
+ * -------------
  */
 
-/*
- * Sticky footer styles
- * --------------------
- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  /* Custom page CSS
-  -------------------------------------------------- */
-  /* Not required for template or sticky footer method. */
-  > .container {
-    //padding: 60px 15px 0;
-  }
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    /* Custom page CSS
+    -------------------------------------------------- */
+    /* Not required for template or sticky footer method. */
+    > .container {
+        padding: 60px 15px 0;
+    }
 }
