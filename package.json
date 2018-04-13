@@ -68,8 +68,8 @@
     "static-server": "^2.2.0"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0",
-    "jquery": "^3.0.0",
-    "popper.js": "^1.12.9"
+    "bootstrap": "^4.1.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.0"
   }
 }
