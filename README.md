@@ -13,7 +13,7 @@ You will need the following installed on your computer.
 
 Clone this repo to your computer and run npm install to install all the dependencies.
 ```
-git clone https://github.com/Yilber/boilerplate.git
+git clone https://github.com/Yilber/bootstrap4-boilerplate.git
 cd boilerplate
 ```
 
